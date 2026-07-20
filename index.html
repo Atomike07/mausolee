@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mausolée royal de Maurétanie — Recueil de témoignage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{
+  --nuit:#0b0d12;
+  --nuit2:#10131b;
+  --panneau:rgba(255,255,255,.045);
+  --bord:rgba(200,128,74,.28);
+  --cuivre:#c8804a;
+  --cuivre-clair:#e2a370;
+  --pierre:#e9e3d4;
+  --faible:#98917f;
+  --mer:#4aa8a0;
+  --erreur:#d86a5a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 600px at 50% -200px, rgba(200,128,74,.10), transparent 60%),
+    radial-gradient(900px 500px at 90% 110%, rgba(74,168,160,.06), transparent 60%),
+    var(--nuit);
+  color:var(--pierre);
+  font-family:'Rajdhani',system-ui,sans-serif;
+  font-size:17px;
+  min-height:100vh;
+}
+.cadre{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+
+/* ── En-tête ── */
+header{text-align:center;padding:26px 0 8px}
+.surtitre{font-size:13px;letter-spacing:.35em;text-transform:uppercase;color:var(--cuivre);font-weight:600}
+h1{
+  font-family:'Cinzel',serif;font-weight:800;font-size:clamp(24px,5.4vw,38px);
+  line-height:1.18;margin:12px 0 6px;color:var(--pierre);
+}
+.soustitre{color:var(--faible);font-size:15.5px;max-width:560px;margin:0 auto;line-height:1.5}
+
+/* ── Les 7 bagues (progression) ── */
+.bagues{display:flex;justify-content:center;gap:14px;margin:30px 0 8px;flex-wrap:wrap}
+.bague{
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid rgba(200,128,74,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;color:var(--faible);
+  cursor:pointer;background:transparent;
+  transition:all .3s ease;position:relative;
+}
+.bague::after{
+  content:'';position:absolute;inset:4px;border-radius:50%;
+  border:1px solid rgba(200,128,74,.18);
+}
+.bague.active{
+  border-color:var(--cuivre-clair);color:var(--nuit);
+  background:linear-gradient(145deg,var(--cuivre-clair),var(--cuivre));
+  box-shadow:0 0 18px rgba(200,128,74,.45);
+}
+.bague.faite{border-color:var(--cuivre);color:var(--cuivre-clair);background:rgba(200,128,74,.12)}
+.legende-bagues{text-align:center;font-size:12.5px;color:var(--faible);letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+
+/* ── Sections ── */
+section{
+  display:none;
+  background:var(--panneau);
+  border:1px solid var(--bord);
+  border-radius:16px;
+  padding:26px 22px;
+  backdrop-filter:blur(10px);
+  animation:apparition .35s ease;
+}
+section.visible{display:block}
+@keyframes apparition{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.num-section{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--cuivre);font-weight:600}
+h2{font-family:'Cinzel',serif;font-weight:600;font-size:22px;margin:8px 0 4px}
+.intro-section{color:var(--faible);font-size:15px;line-height:1.5;margin-bottom:22px}
+
+.champ{margin-bottom:20px}
+label{display:block;font-weight:600;font-size:16px;margin-bottom:7px;line-height:1.4}
+.aide{display:block;font-weight:400;font-size:13.5px;color:var(--faible);margin-top:2px}
+input[type=text],select,textarea{
+  width:100%;background:var(--nuit2);border:1px solid rgba(233,227,212,.14);
+  border-radius:10px;color:var(--pierre);font-family:inherit;font-size:16px;
+  padding:11px 13px;transition:border-color .2s;
+}
+textarea{min-height:96px;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cuivre)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8804a' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.radios{display:flex;gap:10px;flex-wrap:wrap}
+.radios label{
+  display:flex;align-items:center;gap:8px;font-weight:500;font-size:15.5px;
+  background:var(--nuit2);border:1px solid rgba(233,227,212,.14);
+  border-radius:10px;padding:10px 16px;cursor:pointer;margin:0;transition:all .2s;
+}
+.radios input{accent-color:var(--cuivre)}
+.radios label:has(input:checked){border-color:var(--cuivre);background:rgba(200,128,74,.10)}
+
+/* ── Médias ── */
+.zone-depot{
+  border:2px dashed rgba(200,128,74,.4);border-radius:14px;
+  padding:26px 16px;text-align:center;cursor:pointer;transition:all .2s;
+  background:rgba(200,128,74,.04);margin-bottom:16px;
+}
+.zone-depot:hover{border-color:var(--cuivre);background:rgba(200,128,74,.08)}
+.zone-depot .picto{font-size:30px;display:block;margin-bottom:8px}
+.zone-depot strong{color:var(--cuivre-clair)}
+.zone-depot span{display:block;font-size:13.5px;color:var(--faible);margin-top:5px}
+.liste-medias{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.carte-media{
+  background:var(--nuit2);border:1px solid rgba(233,227,212,.12);
+  border-radius:12px;padding:12px;display:flex;gap:12px;align-items:flex-start;
+}
+.carte-media .apercu{width:96px;min-width:96px;height:72px;border-radius:8px;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center}
+.carte-media img,.carte-media video{width:100%;height:100%;object-fit:cover}
+.carte-media .infos{flex:1;min-width:0}
+.carte-media .nom{font-size:13px;color:var(--faible);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}
+.carte-media input[type=text]{font-size:14.5px;padding:8px 10px;margin-bottom:6px}
+.btn-suppr{
+  background:none;border:1px solid rgba(216,106,90,.4);color:var(--erreur);
+  border-radius:8px;padding:5px 10px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;
+}
+.total-taille{font-size:14px;color:var(--faible);margin-top:10px}
+.total-taille.alerte{color:var(--erreur)}
+
+/* ── Navigation & boutons ── */
+.nav-bas{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+button.btn{
+  font-family:inherit;font-weight:700;font-size:16px;letter-spacing:.04em;
+  border-radius:10px;padding:12px 24px;cursor:pointer;transition:all .2s;
+}
+.btn-second{background:transparent;border:1px solid rgba(233,227,212,.25);color:var(--pierre)}
+.btn-second:hover{border-color:var(--pierre)}
+.btn-prim{
+  background:linear-gradient(145deg,var(--cuivre-clair),var(--cuivre));
+  border:none;color:var(--nuit);
+}
+.btn-prim:hover{box-shadow:0 0 22px rgba(200,128,74,.4)}
+.btn-export{width:100%;padding:16px;font-size:18px;margin-top:8px}
+.btn-brouillon{background:transparent;border:1px dashed rgba(74,168,160,.5);color:var(--mer);width:100%;margin-top:12px;font-weight:600}
+
+.resume{background:var(--nuit2);border:1px solid rgba(233,227,212,.12);border-radius:12px;padding:16px;margin-bottom:18px;font-size:15.5px;line-height:1.7}
+.resume b{color:var(--cuivre-clair)}
+.note-envoi{font-size:14.5px;color:var(--faible);line-height:1.55;margin-top:14px;border-left:2px solid var(--cuivre);padding-left:12px}
+.statut{margin-top:14px;font-size:15px;font-weight:600;min-height:22px}
+.statut.ok{color:var(--mer)}
+.statut.ko{color:var(--erreur)}
+footer{text-align:center;color:var(--faible);font-size:12.5px;margin-top:34px;letter-spacing:.08em}
+@media(max-width:520px){
+  .carte-media{flex-direction:column}
+  .carte-media .apercu{width:100%;height:150px}
+  .bagues{gap:10px}
+  .bague{width:30px;height:30px;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="cadre">
+
+<header>
+  <div class="surtitre">Patrimoine · Tipaza · Algérie</div>
+  <h1>Mausolée royal de Maurétanie</h1>
+  <p class="soustitre">Vous connaissez ce lieu — le Tombeau de la Chrétienne, Kbor er Roumia. Vos souvenirs, vos photos et vos vidéos serviront à préparer un documentaire. Répondez simplement, avec vos mots. Il n'y a pas de mauvaise réponse.</p>
+</header>
+
+<div class="bagues" id="bagues"></div>
+<div class="legende-bagues">7 étapes — comme les 7 bagues du monument</div>
+
+<!-- ÉTAPE 1 -->
+<section data-etape="1">
+  <div class="num-section">Étape 1 / 7</div>
+  <h2>Qui êtes-vous ?</h2>
+  <p class="intro-section">Quelques mots sur vous et votre lien avec le monument.</p>
+  <div class="champ">
+    <label for="q_nom">Votre prénom (et nom si vous le souhaitez)</label>
+    <input type="text" id="q_nom" data-cle="identite.nom">
+  </div>
+  <div class="champ">
+    <label for="q_lien">Quel est votre lien avec ce lieu ?</label>
+    <select id="q_lien" data-cle="identite.lien">
+      <option value="">— Choisir —</option>
+      <option>J'habite (ou j'ai habité) la région</option>
+      <option>Je suis guide ou je travaille sur le site</option>
+      <option>Passionné d'histoire / de patrimoine</option>
+      <option>Chercheur / étudiant</option>
+      <option>Visiteur régulier</option>
+      <option>Autre</option>
+    </select>
+  </div>
+  <div class="champ">
+    <label for="q_depuis">Depuis quand connaissez-vous ce lieu ?
+      <span class="aide">Par exemple : « depuis l'enfance », « depuis 2015 »…</span></label>
+    <input type="text" id="q_depuis" data-cle="identite.depuis">
+  </div>
+  <div class="champ">
+    <label>Y allez-vous souvent ?</label>
+    <div class="radios" data-cle="identite.frequence">
+      <label><input type="radio" name="freq" value="Très souvent">Très souvent</label>
+      <label><input type="radio" name="freq" value="De temps en temps">De temps en temps</label>
+      <label><input type="radio" name="freq" value="J'y suis allé quelques fois">Quelques fois</label>
+      <label><input type="radio" name="freq" value="Une seule fois">Une seule fois</label>
+    </div>
+  </div>
+</section>
+
+<!-- ÉTAPE 2 -->
+<section data-etape="2">
+  <div class="num-section">Étape 2 / 7</div>
+  <h2>Le monument vu de l'extérieur</h2>
+  <p class="intro-section">Décrivez-le comme à quelqu'un qui ne l'a jamais vu.</p>
+  <div class="champ">
+    <label for="q_ext1">À quoi ressemble-t-il quand on arrive devant ?
+      <span class="aide">Sa forme, sa taille, la pierre, ce qui frappe en premier…</span></label>
+    <textarea id="q_ext1" data-cle="exterieur.description"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_ext2">Dans quel état est-il aujourd'hui ?
+      <span class="aide">Parties abîmées, restaurées, végétation…</span></label>
+    <textarea id="q_ext2" data-cle="exterieur.etat"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_ext3">Qu'y a-t-il autour du monument ?
+      <span class="aide">Le paysage, la mer, le Chenoua, les routes, les villages…</span></label>
+    <textarea id="q_ext3" data-cle="exterieur.environnement"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_ext4">Quel est le plus beau moment pour le voir ?
+      <span class="aide">Lever du soleil, coucher, une saison particulière…</span></label>
+    <input type="text" id="q_ext4" data-cle="exterieur.meilleur_moment">
+  </div>
+</section>
+
+<!-- ÉTAPE 3 -->
+<section data-etape="3">
+  <div class="num-section">Étape 3 / 7</div>
+  <h2>À l'intérieur</h2>
+  <p class="intro-section">Si vous êtes entré, racontez ce que vous avez vu et ressenti.</p>
+  <div class="champ">
+    <label>Êtes-vous déjà entré à l'intérieur ?</label>
+    <div class="radios" data-cle="interieur.entre">
+      <label><input type="radio" name="entre" value="Oui">Oui</label>
+      <label><input type="radio" name="entre" value="Non">Non</label>
+    </div>
+  </div>
+  <div class="champ">
+    <label for="q_int1">Décrivez l'entrée et le chemin qu'on suit à l'intérieur.
+      <span class="aide">La porte, les couloirs, les galeries, dans quel ordre…</span></label>
+    <textarea id="q_int1" data-cle="interieur.parcours"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_int2">Qu'avez-vous ressenti à l'intérieur ?</label>
+    <textarea id="q_int2" data-cle="interieur.ressenti"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_int3">La température, les sons, les odeurs, la lumière ?
+      <span class="aide">Ces détails aident beaucoup à recréer l'ambiance en images.</span></label>
+    <textarea id="q_int3" data-cle="interieur.ambiance"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_int4">Y a-t-il un endroit à l'intérieur qui vous a marqué ?</label>
+    <textarea id="q_int4" data-cle="interieur.lieu_marquant"></textarea>
+  </div>
+</section>
+
+<!-- ÉTAPE 4 -->
+<section data-etape="4">
+  <div class="num-section">Étape 4 / 7</div>
+  <h2>Sous le monument</h2>
+  <p class="intro-section">Ce qu'on dit — ou ce que vous savez — des passages sous le mausolée.</p>
+  <div class="champ">
+    <label>Avez-vous connaissance de passages ou de salles sous le monument ?</label>
+    <div class="radios" data-cle="souterrains.connaissance">
+      <label><input type="radio" name="sout" value="Oui, je les ai vus">Oui, je les ai vus</label>
+      <label><input type="radio" name="sout" value="On m'en a parlé">On m'en a parlé</label>
+      <label><input type="radio" name="sout" value="Non">Non</label>
+    </div>
+  </div>
+  <div class="champ">
+    <label for="q_sout1">Décrivez ce que vous savez : puits, galeries, salles…
+      <span class="aide">Où ça descend, comment on y accède, ce qu'on y trouve.</span></label>
+    <textarea id="q_sout1" data-cle="souterrains.description"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_sout2">Parle-t-on d'un lien avec la mer ou avec une grotte ?</label>
+    <textarea id="q_sout2" data-cle="souterrains.lien_mer_grotte"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_sout3">Ces accès existent-ils encore aujourd'hui ? Sont-ils ouverts, fermés, condamnés ?</label>
+    <textarea id="q_sout3" data-cle="souterrains.acces_actuel"></textarea>
+  </div>
+</section>
+
+<!-- ÉTAPE 5 -->
+<section data-etape="5">
+  <div class="num-section">Étape 5 / 7</div>
+  <h2>Histoire &amp; légendes</h2>
+  <p class="intro-section">Ce qu'on raconte sur ce lieu, de génération en génération.</p>
+  <div class="champ">
+    <label for="q_leg1">Comment appelle-t-on ce lieu chez vous ?
+      <span class="aide">Le ou les noms qu'utilisent les gens de la région.</span></label>
+    <input type="text" id="q_leg1" data-cle="legendes.nom_local">
+  </div>
+  <div class="champ">
+    <label for="q_leg2">Que raconte-t-on à son sujet ?
+      <span class="aide">Légendes, histoires de trésor, récits des anciens…</span></label>
+    <textarea id="q_leg2" data-cle="legendes.recits"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_leg3">Avez-vous une anecdote personnelle liée à ce lieu ?</label>
+    <textarea id="q_leg3" data-cle="legendes.anecdote"></textarea>
+  </div>
+  <div class="champ">
+    <label for="q_leg4">Autre chose que vous voudriez ajouter ?</label>
+    <textarea id="q_leg4" data-cle="legendes.libre"></textarea>
+  </div>
+</section>
+
+<!-- ÉTAPE 6 -->
+<section data-etape="6">
+  <div class="num-section">Étape 6 / 7</div>
+  <h2>Vos images &amp; vidéos</h2>
+  <p class="intro-section">Ajoutez vos photos et vidéos du lieu. Pour chacune, précisez où et quand elle a été prise : c'est précieux pour le documentaire.</p>
+
+  <div class="zone-depot" id="depotImages">
+    <span class="picto">📷</span>
+    <strong>Ajouter des photos</strong>
+    <span>Touchez ici pour choisir une ou plusieurs images</span>
+  </div>
+  <input type="file" id="fichImages" accept="image/*" multiple hidden>
+
+  <div class="zone-depot" id="depotVideos">
+    <span class="picto">🎬</span>
+    <strong>Ajouter des vidéos</strong>
+    <span>Touchez ici pour choisir une ou plusieurs vidéos</span>
+  </div>
+  <input type="file" id="fichVideos" accept="video/*" multiple hidden>
+
+  <div class="liste-medias" id="listeMedias"></div>
+  <div class="total-taille" id="totalTaille"></div>
+</section>
+
+<!-- ÉTAPE 7 -->
+<section data-etape="7">
+  <div class="num-section">Étape 7 / 7</div>
+  <h2>Autorisation &amp; envoi</h2>
+  <p class="intro-section">Dernière étape : vérifiez, autorisez, puis préparez le dossier à renvoyer.</p>
+  <div class="champ">
+    <label>Autorisez-vous l'utilisation de vos réponses, photos et vidéos dans un documentaire ?</label>
+    <div class="radios" data-cle="autorisation.accord">
+      <label><input type="radio" name="autor" value="Oui">Oui</label>
+      <label><input type="radio" name="autor" value="Oui, en me citant">Oui, en me citant</label>
+      <label><input type="radio" name="autor" value="Oui, mais de façon anonyme">Oui, anonymement</label>
+    </div>
+  </div>
+  <div class="champ">
+    <label for="q_credit">Sous quel nom souhaitez-vous être crédité(e) ? <span class="aide">Laissez vide si sans importance.</span></label>
+    <input type="text" id="q_credit" data-cle="autorisation.credit">
+  </div>
+
+  <div class="resume" id="resume"></div>
+
+  <button class="btn btn-prim btn-export" id="btnExport">Préparer le dossier (.zip)</button>
+  <div class="statut" id="statut"></div>
+  <p class="note-envoi">Un fichier <b>temoignage_mausolee.zip</b> va se télécharger. <b>Renvoyez ce fichier à la personne qui vous a transmis ce formulaire</b> (WhatsApp, email, WeTransfer si le fichier est lourd). Il contient vos réponses et vos médias.</p>
+
+  <button class="btn btn-brouillon" id="btnBrouillon">Enregistrer un brouillon de mes réponses (sans les médias)</button>
+</section>
+
+<div class="nav-bas">
+  <button class="btn btn-second" id="btnPrec">← Précédent</button>
+  <button class="btn btn-prim" id="btnSuiv">Suivant →</button>
+</div>
+
+<footer>MAUSOLÉE ROYAL DE MAURÉTANIE · RECUEIL DE TÉMOIGNAGE · MERCI POUR VOTRE CONTRIBUTION</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var NB=7, etape=1;
+var medias=[]; // {file, type:'image'|'video', legende:'', contexte:''}
+var sections=document.querySelectorAll('section');
+var conteneurBagues=document.getElementById('bagues');
+
+/* ── Bagues de progression ── */
+for(var i=1;i<=NB;i++){
+  var b=document.createElement('button');
+  b.className='bague'; b.type='button'; b.textContent=i;
+  b.setAttribute('aria-label','Aller à l\'étape '+i);
+  b.dataset.etape=i;
+  b.addEventListener('click',function(){ allerA(parseInt(this.dataset.etape,10)); });
+  conteneurBagues.appendChild(b);
+}
+function majBagues(){
+  document.querySelectorAll('.bague').forEach(function(b){
+    var n=parseInt(b.dataset.etape,10);
+    b.classList.toggle('active',n===etape);
+    b.classList.toggle('faite',n<etape);
+  });
+}
+function allerA(n){
+  etape=Math.min(NB,Math.max(1,n));
+  sections.forEach(function(s){ s.classList.toggle('visible',parseInt(s.dataset.etape,10)===etape); });
+  document.getElementById('btnPrec').style.visibility=(etape===1)?'hidden':'visible';
+  document.getElementById('btnSuiv').style.visibility=(etape===NB)?'hidden':'visible';
+  majBagues();
+  if(etape===NB) majResume();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('btnPrec').addEventListener('click',function(){allerA(etape-1);});
+document.getElementById('btnSuiv').addEventListener('click',function(){allerA(etape+1);});
+
+/* ── Collecte des réponses ── */
+function collecterReponses(){
+  var r={};
+  document.querySelectorAll('[data-cle]').forEach(function(el){
+    var cle=el.dataset.cle, val='';
+    if(el.classList.contains('radios')){
+      var coche=el.querySelector('input:checked');
+      val=coche?coche.value:'';
+    } else { val=(el.value||'').trim(); }
+    var parties=cle.split('.'), obj=r;
+    for(var i=0;i<parties.length-1;i++){ obj[parties[i]]=obj[parties[i]]||{}; obj=obj[parties[i]]; }
+    obj[parties[parties.length-1]]=val;
+  });
+  return r;
+}
+function nbReponses(){
+  var n=0;
+  document.querySelectorAll('[data-cle]').forEach(function(el){
+    if(el.classList.contains('radios')){ if(el.querySelector('input:checked')) n++; }
+    else if((el.value||'').trim()) n++;
+  });
+  return n;
+}
+
+/* ── Médias ── */
+function lierDepot(idZone,idInput,type){
+  var zone=document.getElementById(idZone), input=document.getElementById(idInput);
+  zone.addEventListener('click',function(){input.click();});
+  input.addEventListener('change',function(){
+    Array.prototype.forEach.call(input.files,function(f){
+      medias.push({file:f,type:type,legende:'',contexte:''});
+    });
+    input.value='';
+    rendreMedias();
+  });
+}
+lierDepot('depotImages','fichImages','image');
+lierDepot('depotVideos','fichVideos','video');
+
+function tailleLisible(o){
+  if(o>1073741824) return (o/1073741824).toFixed(2)+' Go';
+  if(o>1048576) return (o/1048576).toFixed(1)+' Mo';
+  return Math.ceil(o/1024)+' Ko';
+}
+function rendreMedias(){
+  var liste=document.getElementById('listeMedias');
+  liste.innerHTML='';
+  medias.forEach(function(m,idx){
+    var carte=document.createElement('div'); carte.className='carte-media';
+    var ap=document.createElement('div'); ap.className='apercu';
+    var url=URL.createObjectURL(m.file);
+    if(m.type==='image'){ var img=document.createElement('img'); img.src=url; img.alt=''; ap.appendChild(img); }
+    else { var vid=document.createElement('video'); vid.src=url; vid.muted=true; vid.playsInline=true; ap.appendChild(vid); }
+    var infos=document.createElement('div'); infos.className='infos';
+    var nom=document.createElement('div'); nom.className='nom';
+    nom.textContent=(m.type==='image'?'📷 ':'🎬 ')+m.file.name+' · '+tailleLisible(m.file.size);
+    var inLeg=document.createElement('input'); inLeg.type='text';
+    inLeg.placeholder='Que voit-on sur cette '+(m.type==='image'?'photo':'vidéo')+' ?';
+    inLeg.value=m.legende;
+    inLeg.addEventListener('input',function(){m.legende=inLeg.value;});
+    var inCtx=document.createElement('input'); inCtx.type='text';
+    inCtx.placeholder='Où et quand a-t-elle été prise ?';
+    inCtx.value=m.contexte;
+    inCtx.addEventListener('input',function(){m.contexte=inCtx.value;});
+    var sup=document.createElement('button'); sup.className='btn-suppr'; sup.type='button';
+    sup.textContent='Retirer';
+    sup.addEventListener('click',function(){ URL.revokeObjectURL(url); medias.splice(idx,1); rendreMedias(); });
+    infos.appendChild(nom); infos.appendChild(inLeg); infos.appendChild(inCtx); infos.appendChild(sup);
+    carte.appendChild(ap); carte.appendChild(infos); liste.appendChild(carte);
+  });
+  var total=medias.reduce(function(s,m){return s+m.file.size;},0);
+  var elT=document.getElementById('totalTaille');
+  if(medias.length){
+    elT.textContent='Total : '+medias.length+' fichier(s) · '+tailleLisible(total);
+    elT.classList.toggle('alerte',total>734003200);
+    if(total>734003200) elT.textContent+=' — c\'est lourd : si le .zip échoue, envoyez les grosses vidéos à part.';
+  } else { elT.textContent=''; elT.classList.remove('alerte'); }
+}
+
+/* ── Résumé ── */
+function majResume(){
+  var imgs=medias.filter(function(m){return m.type==='image';}).length;
+  var vids=medias.filter(function(m){return m.type==='video';}).length;
+  document.getElementById('resume').innerHTML=
+    'Votre dossier contient : <b>'+nbReponses()+'</b> réponses, <b>'+imgs+'</b> photo(s) et <b>'+vids+'</b> vidéo(s).';
+}
+
+/* ── Export ZIP ── */
+function horodatage(){
+  var d=new Date(), p=function(n){return String(n).padStart(2,'0');};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'_'+p(d.getHours())+'h'+p(d.getMinutes());
+}
+function telecharger(blob,nom){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=nom;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},4000);
+}
+document.getElementById('btnExport').addEventListener('click',function(){
+  var statut=document.getElementById('statut');
+  statut.className='statut'; statut.textContent='Préparation du dossier…';
+  var donnees={
+    projet:'Mausolée royal de Maurétanie — recueil de témoignage',
+    date_export:new Date().toISOString(),
+    reponses:collecterReponses(),
+    medias:medias.map(function(m,i){
+      return {
+        fichier:'medias/'+String(i+1).padStart(2,'0')+'_'+(m.type==='image'?'img':'vid')+'_'+m.file.name.replace(/[^a-zA-Z0-9._-]/g,'_'),
+        nom_original:m.file.name, type:m.type, taille_octets:m.file.size,
+        legende:m.legende, contexte:m.contexte
+      };
+    })
+  };
+  if(typeof JSZip==='undefined'){
+    // Repli sans internet : réponses seules, médias à envoyer à part
+    telecharger(new Blob([JSON.stringify(donnees,null,2)],{type:'application/json'}),
+      'temoignage_mausolee_'+horodatage()+'.json');
+    statut.className='statut ok';
+    statut.textContent='Vos réponses sont téléchargées. Le .zip n\'a pas pu être créé (pas d\'internet ?) : envoyez ce fichier + vos photos/vidéos originales séparément.';
+    return;
+  }
+  try{
+    var zip=new JSZip();
+    zip.file('LISEZMOI.txt',
+      'Témoignage — Mausolée royal de Maurétanie (Tipaza)\n'+
+      'Exporté le : '+new Date().toLocaleString('fr-FR')+'\n\n'+
+      'reponses.json : toutes les réponses au questionnaire + la liste des médias avec leurs légendes.\n'+
+      'medias/ : les photos et vidéos ajoutées.\n\n'+
+      'Renvoyez ce fichier .zip à la personne qui vous a transmis le formulaire.');
+    zip.file('reponses.json',JSON.stringify(donnees,null,2));
+    var dossier=zip.folder('medias');
+    medias.forEach(function(m,i){
+      dossier.file(donnees.medias[i].fichier.replace('medias/',''),m.file);
+    });
+    zip.generateAsync({type:'blob',compression:'STORE'},function(meta){
+      statut.textContent='Préparation… '+Math.round(meta.percent)+'%';
+    }).then(function(blob){
+      telecharger(blob,'temoignage_mausolee_'+horodatage()+'.zip');
+      statut.className='statut ok';
+      statut.textContent='Dossier prêt et téléchargé ('+tailleLisible(blob.size)+'). Merci ! Pensez à le renvoyer.';
+    }).catch(function(e){
+      statut.className='statut ko';
+      statut.textContent='Le .zip a échoué ('+e.message+'). Utilisez le bouton brouillon ci-dessous et envoyez vos médias à part.';
+    });
+  }catch(e){
+    statut.className='statut ko';
+    statut.textContent='Erreur : '+e.message+'. Utilisez le bouton brouillon et envoyez vos médias à part.';
+  }
+});
+
+/* ── Brouillon (réponses texte, sans médias) ── */
+document.getElementById('btnBrouillon').addEventListener('click',function(){
+  var donnees={brouillon:true,date:new Date().toISOString(),reponses:collecterReponses()};
+  telecharger(new Blob([JSON.stringify(donnees,null,2)],{type:'application/json'}),
+    'brouillon_mausolee_'+horodatage()+'.json');
+});
+
+allerA(1);
+})();
+</script>
+</body>
+</html>
